@@ -1,10 +1,10 @@
-# 🔧 Boilerplate Générique de Visualisation de Données
+# 🔧 StarterKit Générique de Visualisation de Données Huwise
 
 ## 📋 Vue d'Ensemble
 
 Ce boilerplate est une architecture **complètement générique et data-agnostique** pour créer des applications de visualisation de données interactives. Il utilise un système de **filtres field-value** et des **composants réutilisables** qui s'adaptent automatiquement à n'importe quel dataset.
 
-**🌋 Exemple de démonstration** : Éruptions volcaniques mondiales via Huwise API
+**🌋 Exemple de démonstration** : Éruptions volcaniques mondiales via l'API Huwise du userclub
 
 ## 🏗️ Architecture Générique
 
