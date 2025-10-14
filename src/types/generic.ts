@@ -69,6 +69,7 @@ export interface IGenericFilterProps {
   label: string;
   type: 'select' | 'multiselect' | 'checkbox';
   placeholder?: string;
+  checkboxValue?: string; // Specific value to use when checkbox is checked
   onFilterChange: (field: string, value: any) => void;
   currentValue?: any;
 }

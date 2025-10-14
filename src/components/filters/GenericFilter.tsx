@@ -9,6 +9,7 @@ export default function GenericFilter({
   label,
   type,
   placeholder = "All values",
+  checkboxValue,
   onFilterChange,
   currentValue
 }: IGenericFilterProps) {
@@ -73,13 +74,16 @@ export default function GenericFilter({
 
   // Checkbox (for boolean fields or presence checks)
   if (type === 'checkbox') {
+    const targetValue = checkboxValue || true; // Use specific value or default to boolean true
+    const isChecked = currentValue === targetValue;
+    
     return (
       <div>
         <label className="flex items-center space-x-2 cursor-pointer" style={{ pointerEvents: 'auto', zIndex: 100 }}>
           <input
             type="checkbox"
-            checked={!!currentValue}
-            onChange={(e) => handleChange(e.target.checked)}
+            checked={isChecked}
+            onChange={(e) => handleChange(e.target.checked ? targetValue : null)}
             className="rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
             style={{ pointerEvents: 'auto' }}
           />
@@ -116,6 +120,7 @@ interface GenericFilterPanelProps {
     label: string;
     type: 'select' | 'multiselect' | 'checkbox';
     placeholder?: string;
+    checkboxValue?: string;
   }>;
   title?: string;
   onReset?: () => void;
@@ -154,6 +159,7 @@ export function GenericFilterPanel({
             label={config.label}
             type={config.type}
             placeholder={config.placeholder}
+            checkboxValue={config.checkboxValue}
             currentValue={getFilterValue(config.field)}
             onFilterChange={updateFilter}
           />

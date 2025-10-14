@@ -45,7 +45,14 @@ const FILTER_CONFIG = [
     {
         field: 'flag_tsunami',
         label: '🌊 With Tsunami',
-        type: 'checkbox' as const
+        type: 'checkbox' as const,
+        checkboxValue: 'oui'
+    },
+    {
+        field: 'flag_earthquake',
+        label: '🫨 With Earthquake',
+        type: 'checkbox' as const,
+        checkboxValue: 'oui'
     }
 ];
 
