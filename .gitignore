@@ -1,0 +1,13 @@
+/.claude/
+/.idea/
+/.next/
+/node_modules/
+/*.iml
+/.env
+/out/
+
+# Composants générés
+src/external/ExternalHeader.tsx
+src/external/ExternalFooter.tsx
+src/external/index.ts
+src/styles/auto-generated.css

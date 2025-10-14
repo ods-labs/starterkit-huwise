@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "../styles/auto-generated.css";
+@import "../styles/external-header-footer.css";
+
+@config "../../tailwind.config.js";
+

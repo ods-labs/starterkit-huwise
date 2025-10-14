@@ -1,0 +1,29 @@
+/**
+ * Styles pour Header/Footer forcé (en plus de ceux récupéré automatiquement)
+ */
+
+.external-header-container {
+    z-index: 100;
+}
+
+/* TODO: faire mieux avec surcouche JS pour check le cookie de session et faire disparaitre dynamiquement */
+.external-header-container .ods-front-header__management-menu {
+    display: none !important;
+}
+
+.external-header-container .ods-responsive-menu-placeholder__toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* SVG des boutons de remplacement de font awesome pour le menu mobile (bars et times) */
+.external-header-container .ods-responsive-menu-collapsible__toggle-button svg path,
+.external-header-container .ods-responsive-menu-placeholder__toggle svg path {
+    fill: #24336a;
+}
+
+.external-header-container .ods-responsive-menu-placeholder__toggle:hover svg path {
+    fill: white;
+}
+
