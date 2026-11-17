@@ -8,7 +8,10 @@
     "build": "npm run build:external && next build",
     "build:fast": "next build",
     "build:external": "node scripts/build-header-footer.js",
-    "start": "next start"
+    "start": "next start",
+    "storybook": "npm run build:external && storybook dev -p 6006",
+    "build-storybook": "npm run build:external && storybook build",
+    "screenshot": "node scripts/screenshot.js"
   },
   "dependencies": {
     "@heroui/button": "2.2.24",
@@ -33,14 +36,19 @@
   },
   "devDependencies": {
     "@react-types/shared": "3.30.0",
+    "@storybook/addon-a11y": "^10.6.7",
+    "@storybook/addon-docs": "^10.6.7",
+    "@storybook/nextjs-vite": "^10.6.7",
     "@tailwindcss/postcss": "4.1.11",
-    "@types/node": "20.5.7",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^20.19.43",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "clean-css": "^5.3.3",
     "dotenv": "^17.2.2",
     "globals": "16.0.0",
     "jsdom": "^23.2.0",
+    "playwright": "^1.65.1",
     "postcss": "^8.5.6",
     "postcss-discard": "^2.0.0",
     "postcss-prefixwrap": "^1.57.0",
@@ -49,6 +57,7 @@
     "puppeteer": "^24.20.0",
     "purgecss": "^7.0.2",
     "react-icons": "^5.5.0",
+    "storybook": "^10.6.7",
     "tailwind-variants": "2.0.1",
     "tailwindcss": "4.1.11",
     "typescript": "5.6.3"
