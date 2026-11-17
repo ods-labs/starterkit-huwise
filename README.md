@@ -20,20 +20,33 @@ src/
 ├── contexts/
 │   └── GenericDataContext.tsx # Contexte générique field-value
 ├── hooks/
-│   └── useGenericData.ts    # Hooks génériques React Query
+│   ├── useGenericData.ts    # Hooks génériques React Query
+│   └── useBreakpoint.ts     # Breakpoint responsive courant
 ├── config/
-│   └── genericConfig.ts     # Configuration générique
+│   └── colors.js            # Palette du thème (utilisée par tailwind.config.js)
 ├── components/
 │   ├── maps/
 │   │   └── GenericMap.tsx   # Carte générique MapLibre
 │   ├── charts/
-│   │   └── GenericTimeSeries.tsx # Graphiques Recharts
+│   │   ├── GenericTimeSeries.tsx # Graphiques Recharts (+ sa story Storybook)
+│   │   └── __fixtures__/FigmaReference.tsx # Story : composant à côté de sa capture Figma
 │   ├── stats/
 │   │   └── GenericStats.tsx # Statistiques génériques
-│   └── filters/
-│       └── GenericFilter.tsx # Filtres génériques
+│   ├── filters/
+│   │   └── GenericFilter.tsx # Filtres génériques
+│   └── ui/
+│       └── HTMLContent.tsx  # Rendu de contenu HTML
+├── layouts/
+│   └── ExternalLayout.tsx   # Header/footer du domaine Huwise
+├── external/                # Header/footer générés par npm run build:external (non versionnés)
+├── styles/                  # CSS du header/footer (auto-generated.css est généré)
+├── utils/                   # Formatage des nombres, chemins, cookies, analytics…
+├── analytics/
+│   └── PianoAnalytics.js    # Intégration Piano Analytics
 └── app/
-    ├── page.tsx             # Page principale (exemple volcanique)
+    ├── layout.js            # Layout racine
+    ├── providers.tsx        # Providers (React Query, HeroUI…)
+    └── page.tsx             # Page principale (exemple volcanique) + sa configuration
 ```
 
 ## ✨ Fonctionnalités Génériques
@@ -68,7 +81,7 @@ src/
 
 ### ⚙️ **Configuration Only**
 
-**Seule la configuration change selon le dataset :**
+**Seule la configuration change selon le dataset** (dans l'exemple, en tête de `src/app/page.tsx`) :
 
 ```typescript
 const DATA_SOURCE_CONFIG: IDataSourceConfig = {
@@ -76,7 +89,7 @@ const DATA_SOURCE_CONFIG: IDataSourceConfig = {
   datasetId: 'les-eruptions-volcaniques-dans-le-monde',
   fields: {
     coordinates: 'coordinates',  // Champ coordonnées
-    timestamp: 'date',           // Champ temporel  
+    timestamp: 'year',           // Champ temporel
     label: 'volcano_name'        // Champ d'affichage
   }
 };
@@ -94,7 +107,7 @@ const FILTER_CONFIG = [
 - **API** : Huwise UserClub
 - **Dataset** : `les-eruptions-volcaniques-dans-le-monde`
 - **Format Coordonnées** : `{lat: 37.12, lon: 139.97}`
-- **Champ Temporel** : `date` (formaté avec `date_format(date, "YYYY")`)
+- **Champ Temporel** : `year` (groupé avec `date_format(year, "YYYY")`)
 
 ### Visualisations Implémentées
 
@@ -111,7 +124,7 @@ const FILTER_CONFIG = [
 
 3. **📈 Série Temporelle (Recharts)**
    - BarChart des éruptions par année
-   - Utilise `date_format(date, "YYYY")` pour grouper
+   - Utilise `date_format(year, "YYYY")` pour grouper
    - Tri automatique par date
    - Tooltip interactif
 
@@ -131,13 +144,49 @@ const FILTER_CONFIG = [
    npm install
    ```
 
-2. **Lancement en développement**
+2. **Configuration**
+   ```bash
+   cp .env.dist .env   # puis renseigner NEXT_PUBLIC_HUWISE_API_URL et NEXT_PUBLIC_HUWISE_API_KEY
+   npx playwright install chromium   # une fois par machine, pour npm run screenshot
+   ```
+
+3. **Lancement en développement**
    ```bash
    npm run dev
    ```
 
-3. **Accès à l'exemple**
+4. **Accès à l'exemple**
    - Ouvrez `http://localhost:3000/`
+
+### Scripts
+
+| Commande | Rôle |
+|---|---|
+| `npm run dev` | app en développement (génère d'abord le header/footer du domaine Huwise) |
+| `npm run dev:fast` | idem sans régénérer le header/footer (nécessite un `build:external` antérieur) |
+| `npm run build` | build de production |
+| `npm run storybook` | Storybook sur `http://localhost:6006`, pour développer les composants isolément |
+| `npm run build-storybook` | build statique de Storybook |
+| `npm run screenshot -- <chemin> <fichier.png> [--selector <css>]` | capture d'une page de l'app (Playwright) + relevé des erreurs console |
+
+## 🤖 Développer un projet avec Claude (Figma → code)
+
+Le starter embarque une méthode de développement assistée par Claude Code, rodée sur les
+projets précédents : **inventaire Figma relu, puis matrice de données vérifiée sur l'API, puis
+un écran à la fois**. Le détail est dans [`docs/METHODE.md`](docs/METHODE.md).
+
+1. **Inventaire Figma** — dans Claude Code : `/figma-page-inventory <URL du fichier Figma>`
+   (MCP Figma connecté). Produit `docs/figma-inventory/`, à relire avant tout code.
+2. **Matrice de données** — copier [`docs/matrice-modele.xlsx`](docs/matrice-modele.xlsx) en
+   `docs/<projet>-matrice.xlsx` et la remplir à partir de l'API (une ligne par écran dans
+   « Mapping viz »). Envoyer les questions client au fil de l'eau.
+3. **Composants** — un composant par type de visualisation, développé dans Storybook à côté de
+   sa capture Figma (`FigmaReference`).
+4. **Écrans** — remplir et coller [`docs/PROMPT_DEV_ECRAN.md`](docs/PROMPT_DEV_ECRAN.md) dans
+   Claude Code, un écran à la fois, jusqu'à ce que sa Definition of Done passe.
+
+Les pièges propres au projet vont dans [`docs/PIEGES.md`](docs/PIEGES.md) ; les améliorations de
+la méthode elle-même se remontent dans le starter kit.
 
 
 ## 📦 Dépendances Principales
@@ -157,6 +206,10 @@ const FILTER_CONFIG = [
 - **recharts** : Bibliothèque de graphiques déclarative pour React
 - **@heroui/react** : Composants UI modernes et accessibles
 - **Tailwind CSS** : Framework CSS utilitaire
+
+### Outillage de développement
+- **Storybook 10** (`@storybook/nextjs-vite`) : développement et revue des composants isolés
+- **Playwright** : captures d'écran et relevé des erreurs console (`npm run screenshot`)
 
 ## 🚀 Fonctionnalités Avancées
 
