@@ -30,7 +30,7 @@ RUN cat .env.${ENV} > ./.env && \
 RUN npm run build
 
 # Stage 2: Serve the static files with Nginx
-FROM nginx:1.29.1
+FROM nginx:1.30.7
 
 # Copy the static build output from the builder stage
 COPY --from=builder /app/out /usr/share/nginx/html
